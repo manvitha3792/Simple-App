@@ -10,6 +10,7 @@ export default class Registration extends Component {
     }
   }
   handleUserInput = (e) => {
+    e.preventDefault();
     const {name, value} = e.target;
     this.setState({
       [name]:value,
@@ -23,6 +24,9 @@ export default class Registration extends Component {
   render() {
     const { username, password, reenterpassword} = this.state;
     return (
+      <form action="">
+      <fieldset>
+        <legend>Registration</legend>
       <div className="Registration">
         <div>
           <label htmlFor="username" >UserName</label>
@@ -61,6 +65,8 @@ export default class Registration extends Component {
       </div>
         <button onClick={this.handleRegister}>Register</button>
       </div>
+      </fieldset>
+      </form>
     )
   }
 }
