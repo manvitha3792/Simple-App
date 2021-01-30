@@ -5,7 +5,7 @@ import Registration  from './components/Registration'
 import Logout from './components/Logout';
 import { Component } from 'react';
 import CreatePost from './components/CreatePost';
-import { PostList } from './components/PostList';
+import PostList from './components/PostList';
 
 class App extends Component {
   constructor(props){
@@ -28,11 +28,32 @@ class App extends Component {
     })
   }
   onClickCreatePost = ({id, title, content}) => {
+    let newPosts = [...this.state.posts, {id, title, content}];
     this.setState({
+      posts: newPosts,
       title: title,
       content: content
+    })
+  }
+  onDeletePost = (id) => {
+    let { posts: oldPosts } = this.state;
+    const newPosts = [...oldPosts].filter( post => post.id !== id);
+    this.setState({
+      posts: newPosts
+    })
+  }
+  onClickUpdatePost = ({id, title, content}) => {
+    let { posts: oldPosts } = this.state;
+    const newPosts = oldPosts.map( post => {
+      if(post.id===id){
+        return {
+          id, 
+          title, 
+          content
+        }
+      }
+      return post;
     });
-    let newPosts = [...this.state.posts, {id, title, content}];
     this.setState({
       posts: newPosts
     })
@@ -51,7 +72,7 @@ class App extends Component {
           this.state.username &&  <CreatePost onClickCreatePost={this.onClickCreatePost} />
         }
         {
-          this.state.username && this.state.posts && <PostList posts={this.state.posts}/>
+          this.state.username && this.state.posts && <PostList posts={this.state.posts} onClickUpdatePost={this.onClickUpdatePost} onDeletePost={this.onDeletePost}/>
         }
       </div>
     );
