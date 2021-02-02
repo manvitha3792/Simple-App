@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 
-export default class CreatePost extends Component {
+export default class UpdatePost extends Component {
   constructor(props){
     super(props);
     this.state = {
-      title:'',
-      content:'',
-      id: 1
+      title: this.props.post.title,
+      content: this.props.post.content,
+      id: this.props.post.id
     }
     this.myRef = React.createRef();
   }
@@ -17,30 +17,19 @@ export default class CreatePost extends Component {
       [name]:value,
     })
   }
-  handleCreatePost = () =>{
+  handleUpdatePost = () =>{
     const {title, content, id} = this.state;
-    let oldId = this.state.id;
-    ++oldId;
-    this.setState({
-      id: oldId
-    },() =>{
-      this.props.onClickCreatePost({id, title, content});
-    });
-    this.setState({
-      title:'',
-      content:''
-    });
-    this.myRef.current.focus();
+    this.props.handleEdit({id, title, content});
   }
   render() {
     const {title, content} = this.state;
     return (
-      <div className="CreatePost">
+      <div className="UpdatePost">
         <form onSubmit={ e => {
           e.preventDefault();
         }}>
           <fieldset>
-            <legend>CreatePost</legend>
+            <legend>UpdatePost</legend>
             <div>
               <label htmlFor="title">Title</label>
               <input 
@@ -63,7 +52,7 @@ export default class CreatePost extends Component {
                 onChange={this.handleUserInput}
               />
             </div>
-            <button onClick={this.handleCreatePost}>Create</button>
+            <button onClick={this.handleUpdatePost}>Update</button>
           </fieldset>
         </form>
       </div>
