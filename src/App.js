@@ -6,6 +6,7 @@ import Logout from './components/Logout';
 import { Component } from 'react';
 import CreatePost from './components/CreatePost';
 import PostList from './components/PostList';
+import Stories from './components/Stories';
 
 class App extends Component {
   constructor(props){
@@ -73,6 +74,9 @@ class App extends Component {
         }
         {
           this.state.username && this.state.posts && <PostList posts={this.state.posts} onClickUpdatePost={this.onClickUpdatePost} onDeletePost={this.onDeletePost}/>
+        }
+        {
+          this.state.username && <Stories />
         }
       </div>
     );

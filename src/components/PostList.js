@@ -1,63 +1,47 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import CreatePost from './CreatePost'
 import UpdatePost from './UpdatePost';
 
-const Post =({id, title, content}) => {
-  return (
-    <div className="Post">
-      <span>{id}</span><h3>{title}</h3>
-      <p>{content}</p>
-    </div>
-  )
-}
+export default function PostList(props){
+  const [editPosts, setEditPosts ] = useState({});
 
-export default class PostList extends Component{
-  constructor(props){
-    super(props);
-    this.state ={
-      editPosts: {}
-    }
+  const deletePost = (id) => {
+    console.log(id)
+    props.onDeletePost(id);
   }
-  deletePost = (id) => {
-    this.props.onDeletePost(id);
+  const editPost = (id, title, content) => {
+    console.log(id, 'editing')
+    setEditPosts( () => {
+      return {
+        [id]: true
+      }
+    });
   }
-  editPost = (id, title, content) => {
-    const {editPosts} = this.state;
-     editPosts[id] = true;
-    this.setState({
-      editPosts
-    })
-  }
-  handleEdit = ({id, title, content}) => {
-    this.props.onClickUpdatePost({id, title, content});
-    const {editPosts} = this.state;
+  const handleEdit = ({id, title, content}) => {
+    props.onClickUpdatePost({id, title, content});
     editPosts[id] = false;
-   this.setState({
-     editPosts
-   })
+    setEditPosts( () => editPosts);
   }
-
-  render(){
-    return (
+  return (
       <div className="PostList">
         {
-          (this.props.posts || []).map( ({id, title, content}) => {
-            if(this.state.editPosts[id]){
+          (props.posts || []).map( ({id, title, content}) => {
+            console.log(editPosts)
+            if(editPosts[id]){
               const post = {id, title, content}
-              return <UpdatePost post={post} handleEdit={this.handleEdit} key={id}/>
+              return <UpdatePost post={post} handleEdit={handleEdit} key={id}/>
             } else {
               return (
                 <div className="Post" key={id}>
                   <span>{id}</span><h3>{title}</h3>
                   <p>{content}</p>
-                  <button onClick={() => this.deletePost(id)}>Delete</button>
-                  <button onClick={() => this.editPost(id,title, content)}>Edit</button>
+                  <button onClick={() => deletePost(id)}>Delete</button>
+                  <button onClick={() => editPost(id,title, content)}>Edit</button>
                 </div>
               )
             }
           })
         }
       </div>
-    )
-  }
+  )
 }
